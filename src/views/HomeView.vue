@@ -1,18 +1,36 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
+    <div id="Network1">
+        <HeadPage/>
+    </div>
+    <MyDivder/>
+    <el-divider border-style="dashed"/>
+    <div id="Network2">
+        <TabulationPage/>
+    </div>
+
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+<script setup lang="ts">
+import MyDivder from "@/views/MyDivder/MyDivder.vue";
+import HeadPage from "@/views/MyDivder/HeadPage.vue";
+import TabulationPage from "@/views/MyDivder/TabulationPage.vue";
+import {useStore} from "vuex";
 
-export default defineComponent({
-  name: 'HomeView',
-  components: {
-    HelloWorld,
-  },
-});
+import {onMounted} from "vue";
+
+const store = useStore(); // 获取 Vuex store 实例
+
+// 调用 tokenLoginUser action
+// const autoLogin = async () => {
+//     await store.dispatch("user/tokenLoginUser"); // 将 "user" 替换为你的模块名
+// };
+// // 在组件挂载后触发自动登录
+// onMounted(autoLogin);
+
 </script>
+
+<style scoped>
+#Network1 {
+
+}
+</style>
