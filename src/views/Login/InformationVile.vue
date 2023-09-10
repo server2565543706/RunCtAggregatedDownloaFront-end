@@ -8,7 +8,7 @@
             <el-main>
                 <HeadViews/>
             </el-main>
-            <el-footer>{{loginUser.userRole}}</el-footer>
+            <el-footer>底下</el-footer>
         </el-container>
 
     </div>
@@ -20,16 +20,19 @@ import TabViews from "@/views/Login/LoginViews/TabViews.vue";
 import HeadViews from "@/views/Login/LoginViews/HeadViews.vue";
 import MyDivder from "@/views/MyDivder/MyDivder.vue";
 import {useStore} from "vuex";
-import {toRef} from "vue";
+import {onMounted, toRef} from "vue";
 import ACCESSNUM from "@/access/ACCESSNUM";
 import router from "@/router";
 
 const store = useStore() // 获取 Vuex store 实例
 const loginUser = toRef(store.state.user, 'loginUser');
-if (loginUser.value.userRole === ACCESSNUM.NOT_LOGIN){
+if (loginUser.value.userRole === ACCESSNUM.NOT_LOGIN) {
     router.push("/noauth")
 }
-
+const autoLogin = async () => {
+    await store.dispatch("user/tokenLoginUser"); // 将 "user" 替换为你的模块名
+};
+// onMounted(autoLogin)
 
 </script>
 

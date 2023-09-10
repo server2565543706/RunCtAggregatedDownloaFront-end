@@ -1,6 +1,4 @@
 <template>
-  <!--    <div>你好管理员{{ store.state.user?.loginUser.userName ?? '未登录' }}</div>-->
-  <!--    <div>傻逼前端真jb难写写了一遍根本不想写第二遍c</div>-->
     <div id="AdminViews">
         <el-container class="layout-container-demo" style="height: 500px">
             <el-aside width="200px">
@@ -11,15 +9,12 @@
                                 <el-icon>
                                     <message/>
                                 </el-icon>
-                                Navigator One
+                                服务器信息
                             </template>
                             <el-menu-item-group>
-                                <template #title>Group 1</template>
-                                <el-menu-item index="1-1">Option 1</el-menu-item>
-                                <el-menu-item index="1-2">Option 2</el-menu-item>
-                            </el-menu-item-group>
-                            <el-menu-item-group title="Group 2">
-                                <el-menu-item index="1-3">Option 3</el-menu-item>
+                                <el-menu-item index="1-1" @click="navigateToUserPage('index')">服务器允许情况
+                                </el-menu-item>
+                                <el-menu-item index="1-2" @click="navigateToUserPage('user')">用户</el-menu-item>
                             </el-menu-item-group>
                             <el-sub-menu index="1-4">
                                 <template #title>Option4</template>
@@ -31,35 +26,25 @@
                                 <el-icon>
                                     <icon-menu/>
                                 </el-icon>
-                                Navigator Two
+                                内容信息
                             </template>
                             <el-menu-item-group>
-                                <template #title>Group 1</template>
-                                <el-menu-item index="2-1">Option 1</el-menu-item>
-                                <el-menu-item index="2-2">Option 2</el-menu-item>
+                                <el-menu-item index="2-1" @click="navigateToUserPage('tabulation')">所有信息
+                                </el-menu-item>
+                                <el-menu-item index="2-2" @click="navigateToUserPage('auditinformation')">审核信息
+                                </el-menu-item>
                             </el-menu-item-group>
-                            <el-menu-item-group title="Group 2">
-                                <el-menu-item index="2-3">Option 3</el-menu-item>
-                            </el-menu-item-group>
-                            <el-sub-menu index="2-4">
-                                <template #title>Option 4</template>
-                                <el-menu-item index="2-4-1">Option 4-1</el-menu-item>
-                            </el-sub-menu>
                         </el-sub-menu>
                         <el-sub-menu index="3">
                             <template #title>
                                 <el-icon>
                                     <setting/>
                                 </el-icon>
-                                Navigator Three
+                                服务器设置
                             </template>
                             <el-menu-item-group>
-                                <template #title>Group 1</template>
                                 <el-menu-item index="3-1">Option 1</el-menu-item>
                                 <el-menu-item index="3-2">Option 2</el-menu-item>
-                            </el-menu-item-group>
-                            <el-menu-item-group title="Group 2">
-                                <el-menu-item index="3-3">Option 3</el-menu-item>
                             </el-menu-item-group>
                             <el-sub-menu index="3-4">
                                 <template #title>Option 4</template>
@@ -73,32 +58,14 @@
             <el-container>
                 <el-header style="text-align: right; font-size: 12px">
                     <div class="toolbar">
-                        <el-dropdown>
-                            <el-icon style="margin-right: 8px; margin-top: 1px"
-                            >
-                                <setting
-                                />
-                            </el-icon>
-                            <template #dropdown>
-                                <el-dropdown-menu>
-                                    <el-dropdown-item>View</el-dropdown-item>
-                                    <el-dropdown-item>Add</el-dropdown-item>
-                                    <el-dropdown-item>Delete</el-dropdown-item>
-                                </el-dropdown-menu>
-                            </template>
-                        </el-dropdown>
-                        <span>Tom</span>
+                        <el-button type="success" v-show="ButtonFlase">添加用户</el-button>
+                        <el-button type="success" v-show="Buttontabulation">添加内容</el-button>
+                        <el-button type="success" @click="GetExit">返回</el-button>
                     </div>
                 </el-header>
 
                 <el-main>
-                    <el-scrollbar>
-                        <el-table :data="tableData">
-                            <el-table-column prop="date" label="Date" width="140"/>
-                            <el-table-column prop="name" label="Name" width="120"/>
-                            <el-table-column prop="address" label="Address"/>
-                        </el-table>
-                    </el-scrollbar>
+                    <router-view></router-view> <!-- 使用 <router-view> 动态渲染子页面内容 -->
                 </el-main>
             </el-container>
         </el-container>
@@ -106,18 +73,40 @@
 </template>
 
 <script setup lang="ts">
-import {useStore} from 'vuex';
-import {ref} from 'vue'
-const store = useStore() // 获取 Vuex store 实例
-
 import {Menu as IconMenu, Message, Setting} from '@element-plus/icons-vue'
+import router from '@/router';
+import {ref, watch} from "vue";
+import {useRoute} from 'vue-router'; // 导入 useRoute
 
-const item = {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+const route = useRoute(); // 使用 useRoute 获取当前路由信息
+const routerPath = ref(route.fullPath);
+const ButtonFlase = ref(false)
+const Buttontabulation = ref(false)
+
+// 使用 watch 监听 route.fullPath 的变化
+watch(() => route.fullPath, (to, from) => {
+    // 在路由变化时更新 routerPath 的值
+    routerPath.value = to;
+    if (routerPath.value === '/admin/user') {
+        ButtonFlase.value = true; // 当路由为 /admin/user 时显示按钮
+        Buttontabulation.value = false
+    } else if (routerPath.value === '/admin/tabulation') {
+        ButtonFlase.value = false; // 隐藏用户按钮
+        Buttontabulation.value = true
+    } else {
+        ButtonFlase.value = false; // 其他路由隐藏按钮
+        Buttontabulation.value = false
+    }
+});
+
+
+const GetExit = () => {
+    router.push("/")
 }
-const tableData = ref(Array.from({length: 40}).fill(item))
+const navigateToUserPage = (moduleName: any) => {
+    // 使用路由导航到用户页面，假设路由中定义了名为 "user" 的子路由
+    router.push({name: moduleName}); // 根据实际路由配置进行设置
+};
 
 </script>
 

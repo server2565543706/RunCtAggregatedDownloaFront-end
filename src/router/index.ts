@@ -4,6 +4,7 @@ import NoAuth from '@/views/NoAuth.vue';
 import ACCESS_ENUM from "@/access/ACCESSNUM";
 import InformationVile from "@/views/Login/InformationVile.vue";
 import NoLoginView from "@/views/NoLogin/NoLoginView.vue";
+import {meta} from "@typescript-eslint/parser";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -29,7 +30,7 @@ const routes: Array<RouteRecordRaw> = [
         name: 'information',
         component: InformationVile,
         meta: {
-            access: [ACCESS_ENUM.ADMIN, ACCESS_ENUM  .USER]
+            access: [ACCESS_ENUM.ADMIN, ACCESS_ENUM.USER]
             // access: ACCESS_ENUM.ADMIN
         }
     },
@@ -41,6 +42,31 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
             access: ACCESS_ENUM.ADMIN,
         },
+        children: [
+            {
+                path: '',
+                alias: 'index',
+                name: 'index',
+                component: () =>
+                    import(/* webpackChunkName: "index" */ '../views/Admin/IndexPage.vue'),
+            },
+            {
+                path: 'user', // 子路由路径，例如：/admin/user
+                name: 'user', // 子路由名称
+                component: () =>
+                    import(/* webpackChunkName: "user" */ '../views/Admin/UserPage.vue'), // 子路由组件
+            },
+            {
+                path: "tabulation",
+                name: "tabulation",
+                component: () =>
+                    import(/* webpackChunkName: "tabulation" */ '../views/Admin/TabulationPage.vue'), // 子路由组件
+            }, {
+                path: "auditinformation",
+                name: "auditinformation",
+                component: () => import(/* webpackChunkName: "auditinformation" */ '../views/Admin/AuditInformation.vue')
+            },
+        ],
     },
 ];
 
