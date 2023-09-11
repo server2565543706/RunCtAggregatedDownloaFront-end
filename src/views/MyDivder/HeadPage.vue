@@ -28,14 +28,14 @@ const store = useStore() // 获取 Vuex store 实例
 const loginUser = toRef(store.state.user, 'loginUser');
 
 const showButton = computed(() => {
-    console.log('loginUser:', loginUser.value);
-    console.log('ACCESSNUM.ADMIN:', ACCESSNUM.ADMIN);
+    // console.log('loginUser:', loginUser.value);
+    // console.log('ACCESSNUM.ADMIN:', ACCESSNUM.ADMIN);
     // 使用计算属性根据用户角色动态计算按钮是否显示
     return loginUser.value.userRole === ACCESSNUM.ADMIN; // 访问 ref 的值
 });
 const showButton1 = computed(() => {
-    console.log('loginUser:', loginUser.value);
-    console.log('ACCESSNUM.ADMIN:', ACCESSNUM.ADMIN);
+    // console.log('loginUser:', loginUser.value);
+    // console.log('ACCESSNUM.ADMIN:', ACCESSNUM.ADMIN);
     // 使用计算属性根据用户角色动态计算按钮是否显示
     return loginUser.value.userRole === ACCESSNUM.USER || loginUser.value.userRole === ACCESSNUM.ADMIN; // 访问 ref 的值
 });

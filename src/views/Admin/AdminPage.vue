@@ -12,7 +12,7 @@
                                 服务器信息
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="1-1" @click="navigateToUserPage('index')">服务器允许情况
+                                <el-menu-item index="1-1" @click="navigateToUserPage('index')">服务器运行情况
                                 </el-menu-item>
                                 <el-menu-item index="1-2" @click="navigateToUserPage('user')">用户</el-menu-item>
                             </el-menu-item-group>
@@ -58,7 +58,7 @@
             <el-container>
                 <el-header style="text-align: right; font-size: 12px">
                     <div class="toolbar">
-                        <el-button type="success" v-show="ButtonFlase">添加用户</el-button>
+                        <el-button type="success" v-show="ButtonFlase" @click="AddAdminUser">添加用户</el-button>
                         <el-button type="success" v-show="Buttontabulation">添加内容</el-button>
                         <el-button type="success" @click="GetExit">返回</el-button>
                     </div>
@@ -69,6 +69,12 @@
                 </el-main>
             </el-container>
         </el-container>
+
+        <el-dialog v-model="centerDialogVisible" title="添加用户" width="30%" center>
+    <span>
+        <AddAdminUserPage @fn="changeHome"></AddAdminUserPage>
+    </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -76,7 +82,10 @@
 import {Menu as IconMenu, Message, Setting} from '@element-plus/icons-vue'
 import router from '@/router';
 import {ref, watch} from "vue";
-import {useRoute} from 'vue-router'; // 导入 useRoute
+import {useRoute} from 'vue-router';
+import {ElMessage} from "element-plus";
+import AddAdminUserPage from "@/views/Admin/Dialog/AddAdminUserPage.vue"; // 导入 useRoute
+
 
 const route = useRoute(); // 使用 useRoute 获取当前路由信息
 const routerPath = ref(route.fullPath);
@@ -107,6 +116,20 @@ const navigateToUserPage = (moduleName: any) => {
     // 使用路由导航到用户页面，假设路由中定义了名为 "user" 的子路由
     router.push({name: moduleName}); // 根据实际路由配置进行设置
 };
+
+// 配置管理员快捷添加用户
+const centerDialogVisible = ref(false)
+
+const AddAdminUser = () => {
+    centerDialogVisible.value = true
+}
+const changeHome = (n: boolean) => {
+    // console.log(n);
+    if (n) {
+        centerDialogVisible.value = false;
+    }
+}
+
 
 </script>
 
